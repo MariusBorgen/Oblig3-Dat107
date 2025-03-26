@@ -1,0 +1,27 @@
+// CREATE TABLE Ansatt (
+//    Brukernavn VARCHAR(50) PRIMARY KEY,
+//    Fornavn VARCHAR(50),
+//    Etternavn VARCHAR(50),
+//    DatoForAnsettelse DATE,
+//   Stilling VARCHAR(50),
+//   Manedslonn DECIMAL(10, 2)
+// );
+// INSERT INTO Ansatt (Brukernavn, Fornavn, Etternavn, DatoForAnsettelse, Stilling, Manedslonn)
+// VALUES 
+// ('elidal', 'Elias', 'Daland', '2023-03-01', 'CEO', 150000.00),
+// ('kalbrigsten', 'Kristoffer', 'Albrigsten', '2023-03-01', 'Prosjektleder', 100000.00),
+// ('mborgen', 'Marius', 'Borgen', '2023-03-01', 'Renholder', 40000.00),
+// ('enoren', 'Endre', 'Norén', '2023-03-01', 'Utvikler', 70000.00);
+
+// -- Opprett avdeling-tabellen
+// CREATE TABLE avdeling (
+//   avdelingid SERIAL PRIMARY KEY,
+//    navn VARCHAR(100) NOT NULL,
+//   sjefid INT UNIQUE, -- En avdeling kan ha én sjef
+//    FOREIGN KEY (sjefid) REFERENCES ansatt(ansattid) ON DELETE SET NULL
+// );
+
+// -- Legg til kolonnen for avdeling i ansatt-tabellen
+// ALTER TABLE ansatt ADD COLUMN avdelingid INT;
+// ALTER TABLE ansatt ADD CONSTRAINT fk_avdeling FOREIGN KEY (avdelingid) REFERENCES avdeling(avdelingid);
+
