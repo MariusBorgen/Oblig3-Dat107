@@ -2,6 +2,7 @@
 package Main.Dat107;
 
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import DAO.Dat107.AnsattDAO;
@@ -27,10 +28,16 @@ public class Main {
             System.out.println("6. Avslutt");
             System.out.print("Velg et alternativ: ");
             
-            int valg = scanner.nextInt();
-            scanner.nextLine(); 
+            try {
+            	int valg = scanner.nextInt();
+                scanner.nextLine(); 
+                
+                verdi = tilAnsattKlassen(valg);
+            } catch(InputMismatchException e) {
+            	System.out.println("Du må velge fra 1-6..");
+            	scanner.nextLine();
+            }
             
-            verdi = tilAnsattKlassen(valg);
             
         }
     }
@@ -58,8 +65,11 @@ public class Main {
             
             if (ansattBruker != null) {
                 ansattBruker.skrivUt();
+                break;
+            } else {
+                break;
             }
-            break;
+            
     	case 3:
             List<Ansatt> ansatte = ansattDAO.hentAlleAnsatte();
             if (ansatte.isEmpty()) {
