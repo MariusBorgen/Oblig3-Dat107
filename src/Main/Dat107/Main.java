@@ -22,7 +22,7 @@ public class Main {
             System.out.print("Velg et alternativ: ");
             
             int valg = scanner.nextInt();
-            scanner.nextLine(); // Fjerner newline
+            scanner.nextLine(); 
             
             switch (valg) {
                 case 1:
