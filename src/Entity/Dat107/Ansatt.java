@@ -10,7 +10,7 @@ public class Ansatt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ansattid")
-    private Long ansattId;
+    private int ansattId;
 
     @Column(name = "brukernavn", nullable = false, unique = true, length = 4)
     private String brukernavn;
@@ -45,7 +45,7 @@ public class Ansatt {
     }
 
     // Gettere og settere
-    public Long getAnsattId() { return ansattId; }
+    public int getAnsattId() { return ansattId; }
     public String getBrukernavn() { return brukernavn; }
     public String getFornavn() { return fornavn; }
     public String getEtternavn() { return etternavn; }
@@ -60,4 +60,5 @@ public class Ansatt {
             stilling, maanedslonn, ansettelsesdato
         );
     }
+    
 }

@@ -1,42 +1,41 @@
 package Main.Dat107;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import java.util.List;
-
+import java.util.Scanner;
+import DAO.Dat107.AnsattDAO;
 import Entity.Dat107.Ansatt;
 
 public class Main {
     public static void main(String[] args) {
-        EntityManagerFactory emf = null;
-        EntityManager em = null;
-
-        try {
-            // 1. Opprett EntityManagerFactory
-            emf = Persistence.createEntityManagerFactory("ansattPersistenceUnit");
+        Scanner scanner = new Scanner(System.in);
+        AnsattDAO ansattDAO = new AnsattDAO();
+        
+        while (true) {
+            System.out.println("\n--- Meny ---");
+            System.out.println("1. Søk etter ansatt på ID");
+            System.out.println("2. Avslutt");
+            System.out.print("Velg et alternativ: ");
             
-            // 2. Opprett EntityManager
-            em = emf.createEntityManager();
+            int valg = scanner.nextInt();
             
-            // 3. Hent ut alle ansatte med riktig JPQL-syntaks
-            List<Ansatt> ansatte = em.createQuery("SELECT a FROM Ansatt a", Ansatt.class)
-                                   .getResultList();
-            
-            // 4. Skriv ut resultatene
-            if (ansatte.isEmpty()) {
-                System.out.println("Ingen ansatte funnet i databasen.");
-            } else {
-                System.out.println("--- Liste over ansatte ---");
-                ansatte.forEach(Ansatt::skrivUt);
+            switch (valg) {
+                case 1:
+                    System.out.print("Skriv inn ansatt-ID: ");
+                    int id = scanner.nextInt();
+                    Ansatt ansatt = ansattDAO.finnAnsattMedId(id);
+                    
+                    if (ansatt != null) {
+                        ansatt.skrivUt();  
+                    } else {
+                        System.out.println("Ingen ansatt funnet med ID " + id);
+                    }
+                    break;
+                case 2:
+                    System.out.println("Avslutter programmet...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Ugyldig valg, prøv igjen.");
             }
-
-        } catch (Exception e) {
-            System.err.println("Feil under databaseoperasjon:");
-            e.printStackTrace();
-        } finally {
-            if (em != null) em.close();
-            if (emf != null) emf.close();
         }
     }
 }
