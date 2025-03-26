@@ -60,5 +60,15 @@ public class Ansatt {
             stilling, maanedslonn, ansettelsesdato
         );
     }
+
+	public void setStilling(String nyStilling) {
+		
+		
+	}
+
+	public void setLønn(double nyLønn) {
+		
+		
+	}
     
 }
