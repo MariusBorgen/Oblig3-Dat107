@@ -2,6 +2,7 @@ package Entity.Dat107;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ansatt", schema = "oblig3")
@@ -27,10 +28,10 @@ public class Ansatt {
     @Column(name = "stilling", nullable = false, length = 100)
     private String stilling;
 
-    @Column(name = "manedslonn", nullable = false, precision = 10, scale = 2)
+    @Column(name = "manedslonn", nullable = false)
     private double maanedslonn;
 
-    // Obligatorisk tom konstruktør for JPA
+    // Tom konstruktør kreves av JPA
     public Ansatt() {}
 
     // Konstruktør med parametre
@@ -44,7 +45,7 @@ public class Ansatt {
         this.maanedslonn = maanedslonn;
     }
 
-    // Gettere og settere
+    // Gettere
     public int getAnsattId() { return ansattId; }
     public String getBrukernavn() { return brukernavn; }
     public String getFornavn() { return fornavn; }
@@ -53,12 +54,44 @@ public class Ansatt {
     public String getStilling() { return stilling; }
     public double getManedslonn() { return maanedslonn; }
 
-    public void skrivUt() {
-        System.out.printf(
-            "ID: %d | %s %s (%s) | %s | Lønn: %.2f | Ansettelse: %s%n",
-            ansattId, fornavn, etternavn, brukernavn, 
-            stilling, maanedslonn, ansettelsesdato
+    // Settere for oppdatering
+    public void setStilling(String nyStilling) {
+        if (nyStilling != null && !nyStilling.trim().isEmpty()) {
+            this.stilling = nyStilling;
+        }
+    }
+
+    public void setManedslonn(double nyLonn) {
+        if (nyLonn > 0) {
+            this.maanedslonn = nyLonn;
+        }
+    }
+
+    // For bedre utskrift
+    @Override
+    public String toString() {
+        return String.format(
+            "ID: %d | %s %s (%s) | Stilling: %s | Lønn: %.2f | Ansettelse: %s",
+            ansattId, fornavn, etternavn, brukernavn, stilling, maanedslonn, ansettelsesdato
         );
     }
-    
+
+    // For enkel utskrift til konsoll
+    public void skrivUt() {
+        System.out.println(this);
+    }
+
+    // Equals og hashCode for sikker entitetshåndtering
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Ansatt ansatt = (Ansatt) obj;
+        return ansattId == ansatt.ansattId && Objects.equals(brukernavn, ansatt.brukernavn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ansattId, brukernavn);
+    }
 }
