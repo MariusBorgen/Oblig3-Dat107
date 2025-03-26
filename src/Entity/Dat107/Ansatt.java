@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "ansatt", schema = "Oblig3")
+@Table(name = "ansatt", schema = "oblig3")
 public class Ansatt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ansatt_id")
+    @Column(name = "ansattid")
     private Long ansattId;
 
     @Column(name = "brukernavn", nullable = false, unique = true, length = 4)
@@ -21,13 +21,13 @@ public class Ansatt {
     @Column(name = "etternavn", nullable = false, length = 50)
     private String etternavn;
 
-    @Column(name = "ansettelsesdato", nullable = false)
+    @Column(name = "datoforansettelse", nullable = false)
     private LocalDate ansettelsesdato;
 
     @Column(name = "stilling", nullable = false, length = 100)
     private String stilling;
 
-    @Column(name = "maanedslonn", nullable = false, precision = 10, scale = 2)
+    @Column(name = "manedslonn", nullable = false, precision = 10, scale = 2)
     private double maanedslonn;
 
     // Obligatorisk tom konstruktør for JPA
