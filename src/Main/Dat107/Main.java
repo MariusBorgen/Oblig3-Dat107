@@ -1,5 +1,6 @@
 package Main.Dat107;
 
+import java.util.List;
 import java.util.Scanner;
 import DAO.Dat107.AnsattDAO;
 import Entity.Dat107.Ansatt;
@@ -10,9 +11,10 @@ public class Main {
         AnsattDAO ansattDAO = new AnsattDAO();
         
         while (true) {
-            System.out.println("\n--- Meny ---");
+        	System.out.println("\n--- Meny ---");
             System.out.println("1. Søk etter ansatt på ID");
-            System.out.println("2. Avslutt");
+            System.out.println("2. Vis alle ansatte");
+            System.out.println("3. Avslutt");
             System.out.print("Velg et alternativ: ");
             
             int valg = scanner.nextInt();
@@ -30,6 +32,14 @@ public class Main {
                     }
                     break;
                 case 2:
+                	 List<Ansatt> ansatte = ansattDAO.hentAlleAnsatte();
+                     if (ansatte.isEmpty()) {
+                         System.out.println("Ingen ansatte funnet i databasen.");
+                     } else {
+                         System.out.println("--- Liste over ansatte ---");
+                         ansatte.forEach(Ansatt::skrivUt);
+                     }
+                case 3:
                     System.out.println("Avslutter programmet...");
                     scanner.close();
                     return;

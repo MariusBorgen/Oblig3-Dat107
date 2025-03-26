@@ -1,5 +1,6 @@
 package DAO.Dat107;
 
+import java.util.List;
 import java.util.Map;
 
 import jakarta.persistence.EntityManager;
@@ -16,7 +17,7 @@ public class AnsattDAO {
 	    	emf = Persistence.createEntityManagerFactory("ansattPersistenceUnit");
 	    }
 	        
-	    public Ansatt finnAnsattMedId(int id) { // Endret fra int til Long
+	    public Ansatt finnAnsattMedId(int id) {
 	        EntityManager em = emf.createEntityManager();
 	        Ansatt ansatt = null;
 	        try {
@@ -25,6 +26,17 @@ public class AnsattDAO {
 	            em.close();
 	        }
 	        return ansatt;
+	    }
+	    
+	    public List<Ansatt> hentAlleAnsatte() {
+	        EntityManager em = emf.createEntityManager();
+	        List<Ansatt> ansatte = null;
+	        try {
+	            ansatte = em.createQuery("SELECT a FROM Ansatt a", Ansatt.class).getResultList();
+	        } finally {
+	            em.close();
+	        }
+	        return ansatte;
 	    }
 
 	  }
