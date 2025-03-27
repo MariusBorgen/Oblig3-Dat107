@@ -17,8 +17,9 @@ public class Avdeling {
     private String navn;
 
     @OneToOne
-    @JoinColumn(name = "sjefid", referencedColumnName = "ansattid", nullable = false)
+    @JoinColumn(name = "sjefid", referencedColumnName = "ansattid", nullable = true)
     private Ansatt sjef;
+
 
     @OneToMany(mappedBy = "avdeling", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Ansatt> ansatte;

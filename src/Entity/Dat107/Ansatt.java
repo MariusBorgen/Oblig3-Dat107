@@ -13,10 +13,6 @@ public class Ansatt {
     @Column(name = "ansattid")
     private int ansattId;
     
-    @ManyToOne
-    @JoinColumn(name = "avdelingid", nullable = false)
-    private Avdeling avdeling;
-
 
     @Column(name = "brukernavn", nullable = false, unique = true, length = 4)
     private String brukernavn;
@@ -35,11 +31,13 @@ public class Ansatt {
 
     @Column(name = "manedslonn", nullable = false)
     private double maanedslonn;
+    
+    @ManyToOne
+    @JoinColumn(name = "avdelingid", referencedColumnName = "avdelingid", nullable = true)
+    private Avdeling avdeling;
 
-    // Tom konstruktør kreves av JPA
     public Ansatt() {}
 
-    // Konstruktør med parametre
     public Ansatt(String brukernavn, String fornavn, String etternavn, 
                  LocalDate ansettelsesdato, String stilling, double maanedslonn) {
         this.brukernavn = brukernavn;
@@ -50,7 +48,6 @@ public class Ansatt {
         this.maanedslonn = maanedslonn;
     }
 
-    // Gettere
     public int getAnsattId() { return ansattId; }
     public String getBrukernavn() { return brukernavn; }
     public String getFornavn() { return fornavn; }
@@ -62,7 +59,6 @@ public class Ansatt {
     public void setAvdeling(Avdeling avdeling) {this.avdeling = avdeling;}
 
 
-    // Settere for oppdatering
     public void setStilling(String nyStilling) {
         if (nyStilling != null && !nyStilling.trim().isEmpty()) {
             this.stilling = nyStilling;
@@ -75,7 +71,6 @@ public class Ansatt {
         }
     }
 
-    // For bedre utskrift
     @Override
     public String toString() {
         return String.format(
@@ -84,12 +79,10 @@ public class Ansatt {
         );
     }
 
-    // For enkel utskrift til konsoll
     public void skrivUt() {
         System.out.println(this);
     }
 
-    // Equals og hashCode for sikker entitetshåndtering
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
