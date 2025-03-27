@@ -41,14 +41,12 @@ public class AvdelingDAO {
         try {
             tx.begin();
 
-            // 1. Lag ny avdeling med sjef
+           
             Avdeling nyAvdeling = new Avdeling(navn, sjef);
             em.persist(nyAvdeling);
 
-            // 2. Sørg for at ID blir generert før vi setter den på sjefen
-            em.flush(); // <- Dette er trikset
+            em.flush(); 
 
-            // 3. Oppdater sjefens avdeling til den nye avdelingen
             sjef.setAvdeling(nyAvdeling);
             em.merge(sjef);
 
@@ -99,7 +97,7 @@ public class AvdelingDAO {
             Avdeling avdeling = em.find(Avdeling.class, avdelingId);
             if (avdeling != null && nySjef != null) {
                 avdeling.setSjef(nySjef);
-                nySjef.setAvdeling(avdeling); // sikre konsistens
+                nySjef.setAvdeling(avdeling); 
                 em.merge(nySjef);
             }
             em.getTransaction().commit();
