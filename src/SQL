@@ -41,5 +41,11 @@
 //ADD COLUMN sjefid INTEGER,
 // ADD CONSTRAINT fk_sjef FOREIGN KEY (sjefid) REFERENCES oblig3.ansatt(ansattid);
 
+// CREATE TABLE IF NOT EXISTS oblig3.prosjekt (
+//    prosjektid SERIAL PRIMARY KEY,
+//    navn VARCHAR(100) NOT NULL,
+//    beskrivelse VARCHAR(500) NOT NULL
+// );
+
 
 
