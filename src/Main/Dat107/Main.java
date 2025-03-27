@@ -103,7 +103,7 @@ public class Main {
             System.out.println("Ansatt oppdatert.");
             break;
     	case 5:
-    	    System.out.print("Brukernavn (3-4 bokstaver): ");
+    	    System.out.print("Skriv brukernavn: ");
     	    String br = scanner.nextLine();
 
     	    System.out.print("Fornavn: ");
@@ -119,9 +119,9 @@ public class Main {
     	    double maanedslonn = scanner.nextDouble();
     	    scanner.nextLine();
 
-    	    LocalDate ansettelsesdato = LocalDate.now(); // Bruker dagens dato
+    	    LocalDate ansettelsesdato = LocalDate.now(); 
 
-    	    // Vis alle avdelinger
+    	   
     	    List<Avdeling> avdelinger = avdelingDAO.hentAlleAvdelinger();
     	    System.out.println("Velg avdeling for den nye ansatte:");
     	    for (Avdeling avd : avdelinger) {
@@ -256,7 +256,7 @@ public class Main {
             System.out.print("Brukernavn (3-4 bokstaver): ");
             brukernavn = scanner.nextLine();
 
-            // Sjekk om brukernavn allerede finnes
+           
             if (ansattDAO.finnAnsattMedBrukernavn(brukernavn) != null) {
                 System.out.println("Brukernavnet er allerede i bruk. Velg et annet.");
             } else {
@@ -283,7 +283,7 @@ public class Main {
 
         Ansatt nyAnsatt = new Ansatt(br, fornavn, etternavn,
                                       ansettelsesdato, stilling, maanedslonn);
-        // Lagre i databasen
+        
         EntityManager em = Persistence.createEntityManagerFactory("ansattPersistenceUnit").createEntityManager();
         em.getTransaction().begin();
         em.persist(nyAnsatt);
