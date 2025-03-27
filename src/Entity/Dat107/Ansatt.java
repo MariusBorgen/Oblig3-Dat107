@@ -12,6 +12,11 @@ public class Ansatt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ansattid")
     private int ansattId;
+    
+    @ManyToOne
+    @JoinColumn(name = "avdelingid", nullable = false)
+    private Avdeling avdeling;
+
 
     @Column(name = "brukernavn", nullable = false, unique = true, length = 4)
     private String brukernavn;
@@ -53,6 +58,9 @@ public class Ansatt {
     public LocalDate getAnsettelsesdato() { return ansettelsesdato; }
     public String getStilling() { return stilling; }
     public double getManedslonn() { return maanedslonn; }
+    public Avdeling getAvdeling() {return avdeling;}
+    public void setAvdeling(Avdeling avdeling) {this.avdeling = avdeling;}
+
 
     // Settere for oppdatering
     public void setStilling(String nyStilling) {

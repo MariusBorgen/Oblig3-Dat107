@@ -7,11 +7,17 @@ import java.util.List;
 import java.util.Scanner;
 import DAO.Dat107.AnsattDAO;
 import Entity.Dat107.Ansatt;
+import DAO.Dat107.AvdelingDAO;
+import Entity.Dat107.Avdeling;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
+
 
 public class Main {
 	
 	static Scanner scanner = new Scanner(System.in);
     static AnsattDAO ansattDAO = new AnsattDAO();
+    static AvdelingDAO avdelingDAO = new AvdelingDAO();
     
     public static void main(String[] args) {
     	
@@ -26,22 +32,23 @@ public class Main {
             System.out.println("4. Oppdater ansatt sin stilling og/eller lønn");
             System.out.println("5. Legg til ny ansatt");
             System.out.println("6. Avslutt");
+            System.out.println("7. Vis ansatte i en avdeling");
+            System.out.println("8. Legg til ny avdeling med sjef");
+            System.out.println("9. Vis alle avdelinger");
             System.out.print("Velg et alternativ: ");
             
             try {
             	int valg = scanner.nextInt();
                 scanner.nextLine(); 
                 
-                verdi = tilAnsattKlassen(valg);
+                verdi = tilMenyen(valg);
             } catch(InputMismatchException e) {
-            	System.out.println("Du må velge fra 1-6..");
+            	System.out.println("Du må skrive tall..");
             	scanner.nextLine();
-            }
-            
-            
+            }  
         }
     }
-    public static boolean tilAnsattKlassen(int valg) {
+    public static boolean tilMenyen(int valg) {
     	
     	boolean avslutt = true;
     	
@@ -95,35 +102,194 @@ public class Main {
             System.out.println("Ansatt oppdatert.");
             break;
     	case 5:
-            System.out.print("Brukernavn: ");
-            String nyttBrukernavn = scanner.nextLine();
-            
-            System.out.print("Fornavn: ");
-            String fornavn = scanner.nextLine();
-            
-            System.out.print("Etternavn: ");
-            String etternavn = scanner.nextLine();
-            
-            System.out.print("Stilling: ");
-            String stilling = scanner.nextLine();
-            
-            System.out.print("Månedslønn: ");
-            double maanedslonn = scanner.nextDouble();
-            
-            LocalDate ansettelsesdato = LocalDate.now();
-            
-            ansattDAO.leggTilAnsatt(nyttBrukernavn, fornavn, etternavn, ansettelsesdato, stilling, maanedslonn);
-            System.out.println("Ny ansatt lagt til.");
-            break;
+    	    System.out.print("Brukernavn (3-4 bokstaver): ");
+    	    String br = scanner.nextLine();
+
+    	    System.out.print("Fornavn: ");
+    	    String fornavn = scanner.nextLine();
+
+    	    System.out.print("Etternavn: ");
+    	    String etternavn = scanner.nextLine();
+
+    	    System.out.print("Stilling: ");
+    	    String stilling = scanner.nextLine();
+
+    	    System.out.print("Månedslønn: ");
+    	    double maanedslonn = scanner.nextDouble();
+    	    scanner.nextLine();
+
+    	    LocalDate ansettelsesdato = LocalDate.now(); // Bruker dagens dato
+
+    	    // Vis alle avdelinger
+    	    List<Avdeling> avdelinger = avdelingDAO.hentAlleAvdelinger();
+    	    System.out.println("Velg avdeling for den nye ansatte:");
+    	    for (Avdeling avd : avdelinger) {
+    	        System.out.println("ID: " + avd.getAvdelingId() + " | " + avd.getNavn());
+    	    }
+
+    	    System.out.print("Skriv inn ID for avdelingen: ");
+    	    int avdId = scanner.nextInt();
+    	    scanner.nextLine();
+
+    	    Avdeling valgtAvdeling = avdelingDAO.finnAvdelingMedId(avdId);
+    	    if (valgtAvdeling == null) {
+    	        System.out.println("Ugyldig avdeling-ID.");
+    	    } else {
+    	        ansattDAO.leggTilAnsatt(br, fornavn, etternavn,
+    	                ansettelsesdato, stilling, maanedslonn, valgtAvdeling);
+    	        System.out.println("Ny ansatt er lagt til i avdeling: " + valgtAvdeling.getNavn());
+    	    }
+    	    break;
+
     	case 6:
             System.out.println("Avslutter programmet...");
             scanner.close();
             avslutt = false;
             break;
+    	case 7: 
+    		visAnsatteIVedAvdeling();
+    	    break;
+    	case 8:
+    	    System.out.print("Navn på ny avdeling: ");
+    	    String navn = scanner.nextLine();
+
+    	    System.out.print("Skriv inn ansatt-ID for den som skal være sjef: ");
+    	    int sjefId = scanner.nextInt();
+    	    scanner.nextLine();
+
+    	    Ansatt sjef = ansattDAO.finnAnsattMedId(sjefId);
+
+    	    if (sjef == null) {
+    	        System.out.print("Ansatt finnes ikke. Vil du registrere ny ansatt som sjef nå? (j/n): ");
+    	        String svar = scanner.nextLine();
+
+    	        if (svar.equalsIgnoreCase("j")) {
+    	            sjef = leggTilNyAnsattFraMeny();
+    	        } else {
+    	            System.out.println("Avbryter opprettelse av avdeling.");
+    	            break;
+    	        }
+    	    }
+
+    	    avdelingDAO.leggTilAvdeling(navn, sjef);
+    	    System.out.println("Avdeling '" + navn + "' opprettet med " +
+    	            sjef.getFornavn() + " " + sjef.getEtternavn() + " som sjef.");
+    	    break;
+    	case 9:
+    	    visAlleAvdelinger();
+    	    break;
+
     	default:
             System.out.println("Ugyldig valg, prøv igjen."); 
     	}
     	return avslutt;
     	
     }
+    private static void visAnsatteIVedAvdeling() {
+        System.out.print("Skriv inn avdeling-ID: ");
+        int avdId = scanner.nextInt();
+        scanner.nextLine();
+
+        Avdeling avdeling = avdelingDAO.finnAvdelingMedId(avdId);
+
+        if (avdeling == null) {
+            System.out.println("Fant ingen avdeling med ID " + avdId);
+        } else {
+            System.out.println("Avdeling: " + avdeling.getNavn());
+            System.out.println("Ansatte:");
+
+            List<Ansatt> ansatte = avdelingDAO.hentAnsatteIVedAvdeling(avdId);
+
+            if (ansatte.isEmpty()) {
+                System.out.println("(Ingen ansatte i denne avdelingen)");
+            } else {
+                for (Ansatt a : ansatte) {
+                    boolean erSjef = avdeling.getSjef().getAnsattId() == a.getAnsattId();
+                    String sjefMarkering = erSjef ? " (SJEF)" : "";
+                    System.out.println("- " + a.getFornavn() + " " + a.getEtternavn() + sjefMarkering);
+                }
+            }
+        }
+    }
+    private static void leggTilNyAvdeling() {
+        System.out.print("Navn på ny avdeling: ");
+        String navn = scanner.nextLine();
+
+        System.out.print("Skriv inn ansatt-ID for den som skal være sjef: ");
+        int sjefId = scanner.nextInt();
+        scanner.nextLine();
+
+        Ansatt nySjef = ansattDAO.finnAnsattMedId(sjefId);
+
+        if (nySjef == null) {
+            System.out.println("Fant ingen ansatt med ID " + sjefId);
+        } else {
+            avdelingDAO.leggTilAvdeling(navn, nySjef);
+            System.out.println("Avdeling lagt til. Sjefen er flyttet til den nye avdelingen.");
+        }
+    }
+    private static void visAlleAvdelinger() {
+        List<Avdeling> avdelinger = avdelingDAO.hentAlleAvdelinger();
+
+        if (avdelinger.isEmpty()) {
+            System.out.println("Ingen avdelinger funnet.");
+        } else {
+            System.out.println("--- Liste over avdelinger ---");
+            for (Avdeling avd : avdelinger) {
+                String sjef = avd.getSjef() != null
+                        ? avd.getSjef().getFornavn() + " " + avd.getSjef().getEtternavn()
+                        : "(Ingen sjef)";
+                System.out.printf("ID: %d | Navn: %s | Sjef: %s%n",
+                        avd.getAvdelingId(), avd.getNavn(), sjef);
+            }
+        }
+    }
+    private static Ansatt leggTilNyAnsattFraMeny() {
+    	String brukernavn;
+    	
+    	while (true) {
+            System.out.print("Brukernavn (3-4 bokstaver): ");
+            brukernavn = scanner.nextLine();
+
+            // Sjekk om brukernavn allerede finnes
+            if (ansattDAO.finnAnsattMedBrukernavn(brukernavn) != null) {
+                System.out.println("Brukernavnet er allerede i bruk. Velg et annet.");
+            } else {
+                break;
+            }
+        }
+        System.out.print("Brukernavn (3-4 bokstaver): ");
+        String br = scanner.nextLine();
+
+        System.out.print("Fornavn: ");
+        String fornavn = scanner.nextLine();
+
+        System.out.print("Etternavn: ");
+        String etternavn = scanner.nextLine();
+
+        System.out.print("Stilling: ");
+        String stilling = scanner.nextLine();
+
+        System.out.print("Månedslønn: ");
+        double maanedslonn = scanner.nextDouble();
+        scanner.nextLine();
+
+        LocalDate ansettelsesdato = LocalDate.now();
+
+        Ansatt nyAnsatt = new Ansatt(br, fornavn, etternavn,
+                                      ansettelsesdato, stilling, maanedslonn);
+        // Lagre i databasen
+        EntityManager em = Persistence.createEntityManagerFactory("ansattPersistenceUnit").createEntityManager();
+        em.getTransaction().begin();
+        em.persist(nyAnsatt);
+        em.getTransaction().commit();
+        em.close();
+
+        return nyAnsatt;
+    }
+
+    
+
+    
+
 }

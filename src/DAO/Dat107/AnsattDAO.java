@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.time.LocalDate;
 import Entity.Dat107.Ansatt;
+import Entity.Dat107.Avdeling;
 
 public class AnsattDAO {
     
@@ -73,17 +74,56 @@ public class AnsattDAO {
         }
     }
 
-    public void leggTilAnsatt(String brukernavn, String fornavn, String etternavn, 
-                              LocalDate ansettelsesdato, String stilling, double maanedslonn) {
+    public boolean erAnsattSjef(int ansattId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(a) FROM Avdeling a WHERE a.sjef.ansattId = :ansattId", Long.class);
+            query.setParameter("ansattId", ansattId);
+            Long antall = query.getSingleResult();
+            return antall > 0;
+        } finally {
+            em.close();
+        }
+    }
+    public void flyttAnsattTilAvdeling(int ansattId, int nyAvdelingId) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            Ansatt nyAnsatt = new Ansatt(brukernavn, fornavn, etternavn, 
-                                         ansettelsesdato, stilling, maanedslonn);
-            em.persist(nyAnsatt);
+
+            Ansatt ansatt = em.find(Ansatt.class, ansattId);
+            Avdeling nyAvdeling = em.find(Avdeling.class, nyAvdelingId);
+
+            if (ansatt == null || nyAvdeling == null) {
+                System.out.println("Fant ikke ansatt eller avdeling.");
+            } else {
+                ansatt.setAvdeling(nyAvdeling);
+                em.merge(ansatt);
+            }
+
             em.getTransaction().commit();
         } finally {
             em.close();
         }
     }
+    public void leggTilAnsatt(String brukernavn, String fornavn, String etternavn,
+            				  LocalDate ansettelsesdato, String stilling, double maanedslonn,
+            				  Avdeling avdeling) {
+    	
+    	EntityManager em = emf.createEntityManager();
+    	try {
+    		em.getTransaction().begin();
+
+    		Ansatt nyAnsatt = new Ansatt(brukernavn, fornavn, etternavn,
+                       ansettelsesdato, stilling, maanedslonn);
+    		nyAnsatt.setAvdeling(avdeling);
+
+    		em.persist(nyAnsatt);
+    		em.getTransaction().commit();
+    	} finally {
+    		em.close();
+    	}
+    }
+
+
 }
