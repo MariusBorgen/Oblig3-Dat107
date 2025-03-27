@@ -3,6 +3,9 @@
     <persistence-unit name="ansattPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>Entity.Dat107.Ansatt</class>
+        
+          <class>Entity.Dat107.Ansatt</class>
+        <class>Entity.Dat107.Avdeling</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
