@@ -47,5 +47,16 @@
 //    beskrivelse VARCHAR(500) NOT NULL
 // );
 
+// CREATE TABLE oblig3.prosjekt_deltakelse (
+//   deltakelseid SERIAL PRIMARY KEY,
+//    ansattid INT NOT NULL,
+//    prosjektid INT NOT NULL,
+//    rolle VARCHAR(50) NOT NULL,
+//   arbeidstimer INT NOT NULL,
+
+//    FOREIGN KEY (ansattid) REFERENCES oblig3.ansatt(ansattid),
+//    FOREIGN KEY (prosjektid) REFERENCES oblig3.prosjekt(prosjektid)
+// );
+
 
 
