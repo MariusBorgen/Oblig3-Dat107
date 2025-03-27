@@ -31,3 +31,15 @@
 // (1, 'styret', 1),
 // (3, 'HR-avdeling', 3);
 
+//CREATE TABLE prosjekt (
+//    prosjektid SERIAL PRIMARY KEY,
+//   navn VARCHAR(100) NOT NULL,
+//    beskrivelse VARCHAR(500) NOT NULL
+// );
+
+//ALTER TABLE oblig3.avdeling
+//ADD COLUMN sjefid INTEGER,
+// ADD CONSTRAINT fk_sjef FOREIGN KEY (sjefid) REFERENCES oblig3.ansatt(ansattid);
+
+
+
