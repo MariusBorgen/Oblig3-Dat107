@@ -25,19 +25,9 @@
 // ALTER TABLE ansatt ADD COLUMN avdelingid INT;
 // ALTER TABLE ansatt ADD CONSTRAINT fk_avdeling FOREIGN KEY (avdelingid) REFERENCES avdeling(avdelingid);
 
-// UPDATE avdeling
-// SET navn = 'IT-avdeling'
-// WHERE avdelingid = 2;
-
-// UPDATE avdeling
-// SET navn = 'HR-avdeling'
-// WHERE avdelingid = 3;
-
-// UPDATE avdeling
-// SET navn = 'Styret'
-// WHERE avdelingid = 1;
-
-// UPDATE avdeling
-// SET navn = 'Ekstra-avdeling'
-// WHERE avdelingid = 4;
+// INSERT INTO oblig3.avdeling (avdelingid, navn, sjefid) VALUES
+// (2, 'Utvikling', 2),
+// (4, 'Ekstra-avdeling', 4),
+// (1, 'styret', 1),
+// (3, 'HR-avdeling', 3);
 
