@@ -35,6 +35,7 @@ public class Main {
             System.out.println("7. Vis ansatte i en avdeling");
             System.out.println("8. Legg til ny avdeling med sjef");
             System.out.println("9. Vis alle avdelinger");
+            System.out.println("10. Gå til prosjektmeny");
             System.out.print("Velg et alternativ: ");
             
             try {
@@ -178,6 +179,10 @@ public class Main {
     	case 9:
     	    visAlleAvdelinger();
     	    break;
+    	case 10:
+    	    new ProsjektMeny().visMeny();
+    	    break;
+
 
     	default:
             System.out.println("Ugyldig valg, prøv igjen."); 

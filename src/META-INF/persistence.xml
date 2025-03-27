@@ -1,16 +1,18 @@
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence"
     version="3.0">
+    
     <persistence-unit name="ansattPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
         <class>Entity.Dat107.Ansatt</class>
-        
-          <class>Entity.Dat107.Ansatt</class>
         <class>Entity.Dat107.Avdeling</class>
+        <class>Entity.Dat107.Prosjekt</class>
+        <class>Entity.Dat107.ProsjektDeltakelse</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="jakarta.persistence.jdbc.url" 
-                     value="jdbc:postgresql://ider-database.westeurope.cloudapp.azure.com:5433/h184587?currentSchema=oblig3"/>
+                      value="jdbc:postgresql://ider-database.westeurope.cloudapp.azure.com:5433/h184587?currentSchema=oblig3"/>
             <property name="jakarta.persistence.jdbc.user" value="h184587"/>
             <property name="jakarta.persistence.jdbc.password" value="pass"/>
 
